@@ -367,6 +367,19 @@
 
       .app {
         height: calc(100vh - 56px);
+        height: calc(var(--vh, 1vh) * 100 - 56px);
+      }
+
+      .chat-input-area {
+        position: fixed !important;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+      }
+
+      .messages-area {
+        padding-bottom: 80px !important;
       }
 
       .chat-input-area {
@@ -645,13 +658,27 @@
       return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
 
-    // Fix hauteur mobile iOS
+    // Fix hauteur mobile iOS + Android
     function setVh() {
       let vh = window.innerHeight * 0.01;
       document.documentElement.style.setProperty('--vh', vh + 'px');
     }
     setVh();
-    window.addEventListener('resize', setVh);
+
+    // Fix Android : le clavier redimensionne la fenetre
+    window.addEventListener('resize', function() {
+      setVh();
+      // Force le scroll vers le bas des messages
+      setTimeout(() => {
+        const area = document.getElementById('messagesArea');
+        if (area) area.scrollTop = area.scrollHeight;
+        // S'assurer que le champ input est visible
+        const input = document.getElementById('messageInput');
+        if (input === document.activeElement) {
+          input.scrollIntoView({ block: 'end', behavior: 'smooth' });
+        }
+      }, 100);
+    });
 
     document.getElementById('pseudoInput').addEventListener('keydown', e => {
       if (e.key === 'Enter') setPseudo();
