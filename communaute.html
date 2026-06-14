@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -357,6 +358,21 @@
       margin-top: 10px;
     }
 
+    .salon-select-mobile {
+      display: none;
+      width: 100%;
+      margin-top: 8px;
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      outline: none;
+      cursor: pointer;
+    }
+
     /* RESPONSIVE MOBILE */
     @media (max-width: 600px) {
       .sidebar { display: none; }
@@ -403,6 +419,10 @@
 
       .chat-header {
         padding: 10px 14px;
+      }
+
+      .salon-select-mobile {
+        display: block;
       }
 
       nav {
@@ -489,6 +509,13 @@
       <div class="chat-header">
         <h2 id="salonTitle"># Général</h2>
         <p id="salonDesc">Espace ouvert à tous — présente-toi, parle librement.</p>
+        <select class="salon-select-mobile" id="salonSelectMobile" onchange="changeSalonMobile(this.value)">
+          <option value="general">💬 Général</option>
+          <option value="parents-separes">👨‍👩‍👧 Parents séparés</option>
+          <option value="divorce">💔 Après le divorce</option>
+          <option value="confiance">💪 Confiance en soi</option>
+          <option value="reconstruction">🌱 Reconstruction</option>
+        </select>
       </div>
 
       <div class="messages-area" id="messagesArea">
@@ -679,6 +706,13 @@
         }
       }, 100);
     });
+
+    function changeSalonMobile(salon) {
+      const btn = document.querySelector(`.salon-btn[onclick*="${salon}"]`);
+      changeSalon(salon, btn || document.querySelector('.salon-btn'));
+      // Mettre à jour le select
+      document.getElementById('salonSelectMobile').value = salon;
+    }
 
     document.getElementById('pseudoInput').addEventListener('keydown', e => {
       if (e.key === 'Enter') setPseudo();
