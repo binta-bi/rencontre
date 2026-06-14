@@ -357,9 +357,53 @@
       margin-top: 10px;
     }
 
-    /* RESPONSIVE */
+    /* RESPONSIVE MOBILE */
     @media (max-width: 600px) {
       .sidebar { display: none; }
+
+      body {
+        overflow: hidden;
+      }
+
+      .app {
+        height: calc(100vh - 56px);
+      }
+
+      .chat-input-area {
+        position: sticky;
+        bottom: 0;
+        z-index: 10;
+        padding: 10px 12px;
+        padding-bottom: max(10px, env(safe-area-inset-bottom));
+        background: white;
+      }
+
+      .chat-input {
+        font-size: 16px;
+      }
+
+      .messages-area {
+        padding: 12px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .chat-header {
+        padding: 10px 14px;
+      }
+
+      nav {
+        padding: 0 14px;
+      }
+
+      .nav-pseudo {
+        font-size: 11px;
+      }
+
+      .modal {
+        padding: 24px 20px;
+        margin: 0 12px;
+      }
     }
   </style>
 </head>
@@ -600,6 +644,14 @@
     function escapeHtml(str) {
       return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
+
+    // Fix hauteur mobile iOS
+    function setVh() {
+      let vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', vh + 'px');
+    }
+    setVh();
+    window.addEventListener('resize', setVh);
 
     document.getElementById('pseudoInput').addEventListener('keydown', e => {
       if (e.key === 'Enter') setPseudo();
